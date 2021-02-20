@@ -37,8 +37,9 @@ def main(forRange):
     else:
         bible = Bible().getCompleteNAA()
 
-    keyword = sys.argv[1].lower()
-    fileName = keyword + ".txt"
+    keyword = str(sys.argv[1].lower())
+    keywords = [x.strip() for x in keyword.split(',')]
+    fileName = keyword.strip().replace(' ', '_') + ".txt"
 
     with open(fileName, 'a+', encoding='utf-8') as file:
         filesize = os.path.getsize(fileName)
@@ -52,8 +53,13 @@ def main(forRange):
             for verse in bible[book][chapter]:
                 thisVerse = bible[book][chapter][verse]
                 refVerse = thisVerse.translate(str.maketrans('', '', string.punctuation)).lower()
+                counter = 0
 
-                if refVerse.startswith(keyword + ' ') or refVerse.endswith(' ' + keyword) or (' ' + keyword + ' ') in refVerse:
+                for word in keywords:
+                    if refVerse.startswith(word + ' ') or refVerse.endswith(' ' + word) or (' ' + word + ' ') in refVerse:
+                        counter += 1
+                
+                if counter == len(keywords):
                     with open(fileName, 'a+', encoding='utf-8') as file:        
                         file.write('\n"' + thisVerse + '" (' + abbr + ' ' + chapter + ':' + verse + ')\n')
 

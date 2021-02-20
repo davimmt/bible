@@ -2,7 +2,7 @@ from Bible import Bible
 from Book import Book
 
 def inputChoices(i):
-    versionChoice = "\n[1] Almeida Corrigida e Fiel (ACF)\n[2] Nova Versão Internacional (NVI)\n[3] Almeida Revista e Atualizada (ARA)\n[4] Nova Almeida Atualizada (NAA)\n\nEscolha a versão (padrão = 4): "
+    versionChoice = "\n[1] Almeida Corrigida e Fiel (ACF)\n[2] Nova Versão Internacional (NVI)\n[3] Almeida Revista e Atualizada (ARA)\n[4] Nova Almeida Atualizada (NAA)\n[4] Nova Versão Transformadora (NVT)\n\nEscolha a versão (padrão = 4): "
     rangeChoice = "\n[1] Toda Bíblia\n[2] Velho Testamento\n[3] Novo Testamento\n[4] Pentateuco\n[5] Profetas Maiores\n[6] Evangelhos\n[7] Epístolas de Paulo\n[8] Salmos e Provérbios\n\nVocê quer gerar (padrão = 1): "
 
     if i == 0: return versionChoice
@@ -15,8 +15,10 @@ def inputMain():
         if inputVersion == 2: returnVersion = "nvi"
         if inputVersion == 3: returnVersion = "ara"
         if inputVersion == 4: returnVersion = "naa"
+        if inputVersion == 5: returnVersion = "nvt"
     except:
-       returnVersion = "naa"
+    #    returnVersion = "naa"
+       returnVersion = "acf"
     
     try:
         inputRange = int(input(inputChoices(1)))
@@ -30,6 +32,10 @@ def inputMain():
         if inputRange == 8: returnRange = 18, 20
     except:
         returnRange = 0, 66
+        # returnRange = 0, 21
+        # returnRange = 21, 38
+        # returnRange = 38, 43
+        # returnRange = 43, 66
 
     return main(returnRange, returnVersion)
 
@@ -38,25 +44,26 @@ def main(forRange, version):
         bookNamePtBR = Bible().getBooksPtBRName(i)
         bookAbbreviation = Bible().getBooksPtBRAbbreviation(i)
         numChapters = int(Bible().getbooksChapterNumber(i))
+        fileName = "biblia-" + version + ".txt"
 
-        with open("biblia.txt", 'a+', encoding='utf-8') as file:
+        with open(fileName, 'a+', encoding='utf-8') as file:
             file.write('"{}/{}":{}'.format(bookNamePtBR, bookAbbreviation, '{'))
 
         for j in range(1, numChapters + 1):
             chapter = str(j)
-            with open("biblia.txt", 'a+', encoding='utf-8') as file:
+            with open(fileName, 'a+', encoding='utf-8') as file:
                 file.write('"{}":{}'.format(chapter, '{'))
 
             site = "https://www.bibliaonline.com.br/"
             url = site + version + "/" + bookNamePtBR.lower().replace(" ", "")  + "/" + chapter
             verses = Book().getInfo(url, bookAbbreviation)
 
-            with open("biblia.txt", 'a+', encoding='utf-8') as file:
+            with open(fileName, 'a+', encoding='utf-8') as file:
                 for numVerse, verse in enumerate(verses):
                     file.write('"{}":"{}",'.format((numVerse + 1), verse))
                 file.write('},')
         
-        with open("biblia.txt", 'a+', encoding='utf-8') as file:
+        with open(fileName, 'a+', encoding='utf-8') as file:
             file.write('},')
 
         print("\nLivro de " + bookNamePtBR + " concluído.")
