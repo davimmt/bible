@@ -32,14 +32,16 @@ def main(forRange):
     """Escreve no arquivo entitulada após a palavra-chave os versículos.
        Write in the file titled after the keyword the verses.
     """
-    if (forRange):
-        bible = Division().between_two_values(Bible().getCompleteNAA(), forRange[0], forRange[1])
-    else:
-        bible = Bible().getCompleteNAA()
+    version = str(sys.argv[1].lower())
 
-    keyword = str(sys.argv[1].lower())
+    bible = Bible().getCompleteNAA() if version == 'naa' else Bible().getCompleteACF()
+
+    if (forRange):
+        bible = Division().between_two_values(bible, forRange[0], forRange[1])
+
+    keyword = str(sys.argv[2].lower())
     keywords = [x.strip() for x in keyword.split(',')]
-    fileName = keyword.strip().replace(' ', '_') + ".txt"
+    fileName = version + "-" + keyword.strip().replace(' ', '_') + ".txt"
 
     with open(fileName, 'a+', encoding='utf-8') as file:
         filesize = os.path.getsize(fileName)

@@ -1,11 +1,11 @@
-# Performar uma simples leitura bíblica no dictionary 'database.Data.Bible.getCompleteNAA()'
+# Performar uma simples leitura bíblica no dictionary 'database.Data.Bible', usando ou a função '.getCompleteNAA()' ou '.getCompleteACF()'
 # Lista dos casos de input:
 # - (1) Abreviação
 # - (2) Abreviação/Capítulo
 # - (3) Abreviação/Capítulo:Versiculo-Versiculo
 # - (4) Abreviação/Capítulo:Versiculo
 
-# Perform a simple biblical read using the dictionary 'database.Data.Bible.getCompleteNAA()'
+# Perform a simple biblical read using the dictionary 'database.Data.Bible' using the function '.getCompleteNAA()' or '.getCompleteACF()'
 # List of input cases:
 # - (1) Abbreviation
 # - (2) Abbreviation/Chapter
@@ -16,8 +16,8 @@ from database.Data import Bible
 import textwrap
 import sys
 
-bible = Bible().getCompleteNAA()
-_input = sys.argv[1].lower()
+bible = Bible().getCompleteNAA() if str(sys.argv[1].lower()) == 'naa' else Bible().getCompleteACF()
+_input = str(sys.argv[2].lower())
 
 def book(_input):
     """Printar todo o livro.
